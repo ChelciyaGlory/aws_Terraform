@@ -1,0 +1,19 @@
+#EC2 with monitoring only
+#This will create one EC2 instance with detailed monitoring enabled.
+
+resource "aws_instance" "app" {
+  ami           = var.ami_id
+  instance_type = var.instance_type
+  monitoring    = var.ec2_monitoring
+
+  tags = {
+    Name = "Mumbai-Instance"
+  }
+}
+
+variable "ec2_monitoring" {
+  description = "Enable EC2 detailed monitoring"
+  type        = bool
+  default     = true
+}
+

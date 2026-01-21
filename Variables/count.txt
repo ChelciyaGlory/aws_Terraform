@@ -1,0 +1,18 @@
+#EC2 with count only
+#This will create multiple EC2s with unique names.
+
+resource "aws_instance" "app" {
+  ami           = var.ami_id
+  instance_type = var.instance_type
+  count         = var.instance_count
+
+  tags = {
+    Name = "Mumbai-Instance-${count.index + 1}"
+  }
+}
+
+variable "instance_count" {
+  description = "Number of EC2 instances"
+  type        = number
+  default     = 5
+}
