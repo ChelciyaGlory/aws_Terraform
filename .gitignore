@@ -8,3 +8,4 @@ echo "*_override.tf" >> .gitignore
 echo "*_override.tf.json" >> .gitignore
 echo "!.terraform.lock.hcl" >> .gitignore
 
+.terraform/
