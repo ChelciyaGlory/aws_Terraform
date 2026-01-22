@@ -1,0 +1,91 @@
+# Terraform AWS Task 2 - Detailed Setup
+
+This folder contains Terraform configurations to create a simple AWS infrastructure with a **VPC, subnets, route tables, security groups, and EC2 instances**.
+
+---
+
+## 1. VPC
+
+- **VPC Name:** simple-vpc  
+- **VPC ID:** `vpc-0f4360f50e5d5c00c`  
+- **CIDR Block:** `192.168.0.0/16`  
+- **DNS Hostnames:** Enabled  
+
+---
+
+## 2. Subnets
+
+| Name           | Subnet ID                  | Type      | CIDR Block     | AZ               | Route Table          | Public IP Auto-Assign |
+|----------------|----------------------------|-----------|----------------|-----------------|--------------------|---------------------|
+| public-subnet  | subnet-0e0737fb171738c35  | Public    | 192.168.10.0/24 | ap-southeast-2a | public-rt (rtb-0ca7f3226c5ba37a2) | Yes                 |
+| private-subnet | subnet-020fff747f2caefc3  | Private   | 192.168.20.0/24 | ap-southeast-2a | private-rt (rtb-0c764e01b7fb90477)| No                  |
+
+---
+
+## 3. Internet Gateway
+
+- **Name:** simple-igw  
+- **Attached VPC:** simple-vpc  
+
+---
+
+## 4. Route Tables
+
+- **Public Route Table** (`public-rt`):  
+  - CIDR Block `0.0.0.0/0` → Internet Gateway (`simple-igw`)  
+
+- **Private Route Table** (`private-rt`):  
+  - No internet access  
+
+---
+
+## 5. Security Groups
+
+| Name        | SG ID                       | Description                   | Rules                                                                 |
+|-------------|-----------------------------|-------------------------------|----------------------------------------------------------------------|
+| public-sg   | sg-035a38084ab9b23ea        | Allow HTTP and SSH            | Ingress: HTTP 80, SSH 22 from 0.0.0.0/0 <br> Egress: All 0.0.0.0/0 |
+| private-sg  | sg-0c576b15f7f0372d4        | Allow SSH from public subnet  | Ingress: SSH 22 from 192.168.10.0/24 <br> Egress: All 0.0.0.0/0    |
+
+---
+
+## 6. EC2 Instances
+
+| Name         | Type       | AMI ID             | Subnet ID                  | SG ID            | Key Pair | Public IP |
+|--------------|-----------|------------------|----------------------------|-----------------|---------|-----------|
+| web_server   | t3.micro  | ami-00a51cc7a8cd53e3f | subnet-0e0737fb171738c35 | sg-035a38084ab9b23ea | demo    | Yes       |
+| app_server   | t3.micro  | ami-00a51cc7a8cd53e3f | subnet-020fff747f2caefc3 | sg-0c576b15f7f0372d4 | demo    | No        |
+
+---
+
+## 7. Key Pair
+
+- **Key Name:** demo  
+- **Key Type:** RSA  
+- **Used for:** SSH access to EC2 instances  
+
+---
+
+## 8. Terraform Commands
+
+1. **Initialize Terraform**  
+```bash
+terraform init
+
+Validate Configuration
+
+terraform validate
+
+
+Plan Infrastructure Changes
+
+terraform plan
+
+
+Apply Changes
+
+terraform apply -auto-approve
+
+
+Destroy Infrastructure
+
+terraform destroy -auto-approve[D[D[D[D[D[D[D[D[D[D[D[D[D[D[D[D[D[D[D[D[D[D[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C
